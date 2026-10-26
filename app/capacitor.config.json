@@ -1,0 +1,6 @@
+{
+  "appId": "com.odiesworld.app",
+  "appName": "Odie's World",
+  "webDir": "www",
+  "android": { "backgroundColor": "#211a14" }
+}

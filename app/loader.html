@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Odie's World</title>
+<style>html,body{margin:0;height:100%;background:#211a14}</style>
+</head>
+<body>
+<script>
+// Odie's World loader: plays the newest copy of the game it has (the one inside the app, or a newer one
+// downloaded earlier), then quietly checks the web for an even newer one to use next time.
+const SITE = 'https://daniels84-prog.github.io/odies-world/';
+const BUNDLED = __BUNDLED_VERSION__;
+function updater(SITE, cur) {
+  let ready = false, hiddenAt = 0, busy = false;
+  async function check() {
+    if (busy || !navigator.onLine) return; busy = true;
+    try {
+      const v = await (await fetch(SITE + 'version.json?t=' + Date.now(), { cache: 'no-store' })).json();
+      if (v && v.version > cur) {
+        const t = await (await fetch(SITE + 'index.html?t=' + Date.now(), { cache: 'no-store' })).text();
+        if (t.length > 20000 && t.includes('odies-world-version')) {
+          localStorage.setItem('ow_html', t); localStorage.setItem('ow_ver', String(v.version)); ready = true; cur = v.version;
+        }
+      }
+    } catch (e) {}
+    busy = false;
+  }
+  setTimeout(check, 3000); setInterval(check, 30 * 60 * 1000);
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) { hiddenAt = Date.now(); return; }
+    // coming back to the app after a while: switch to the new version if one is waiting
+    if (ready && Date.now() - hiddenAt > 30000) location.reload(); else check();
+  });
+}
+(async () => {
+  let ver = BUNDLED, html = null;
+  try { const v = +localStorage.getItem('ow_ver'); if (v > BUNDLED) { html = localStorage.getItem('ow_html'); ver = v; } } catch (e) {}
+  if (!html) html = await (await fetch('game.html')).text();
+  html = html.replace(/<link rel="stylesheet" href="https:\/\/fonts\.googleapis\.com[^>]*>/, '<link rel="stylesheet" href="fonts/fonts.css">');
+  const inject = `<script>(${updater.toString()})(${JSON.stringify(SITE)}, ${ver});<\/script>`;
+  const i = html.lastIndexOf('</body>');
+  html = i >= 0 ? html.slice(0, i) + inject + html.slice(i) : html + inject;
+  document.open(); document.write(html); document.close();
+})();
+</script>
+</body>
+</html>
