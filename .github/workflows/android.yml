@@ -1,5 +1,5 @@
 # Builds the Android app and puts the newest copy at
-# https://github.com/daniels84-prog/odies-world/releases/latest/download/odies-world.apk
+# https://github.com/daniels84-prog/odies-world/releases/latest/download/odies-world.apk (Google Play bundle alongside it).
 name: Android app
 on:
   push:
