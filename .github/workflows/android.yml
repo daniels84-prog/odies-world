@@ -8,6 +8,8 @@ on:
   workflow_dispatch:
 permissions:
   contents: write
+env:
+  UPLOAD_KEYSTORE_BASE64: ${{ secrets.UPLOAD_KEYSTORE_BASE64 }}
 concurrency:
   group: android
   cancel-in-progress: true
@@ -31,16 +33,25 @@ jobs:
           npm ci
           npm run prep
           npx cap sync android
-      - name: Build
+      - name: Build the app for the family tablet (APK)
         working-directory: app/android
         run: |
           chmod +x gradlew
-          ./gradlew assembleRelease bundleRelease -PversionCode=$((GITHUB_RUN_NUMBER + 1)) --no-daemon
-      - name: Collect files
+          ./gradlew assembleRelease -PversionCode=$((GITHUB_RUN_NUMBER + 1)) --no-daemon
+          mkdir -p ../../out && cp app/build/outputs/apk/release/app-release.apk ../../out/odies-world.apk
+      - name: Build the Google Play bundle (AAB), signed with the private upload key
+        if: ${{ env.UPLOAD_KEYSTORE_BASE64 != '' }}
+        working-directory: app/android
+        env:
+          UPLOAD_KEYSTORE_BASE64: ${{ secrets.UPLOAD_KEYSTORE_BASE64 }}
+          RELEASE_STORE_PASSWORD: ${{ secrets.UPLOAD_KEY_PASSWORD }}
+          RELEASE_KEY_PASSWORD: ${{ secrets.UPLOAD_KEY_PASSWORD }}
+          RELEASE_KEY_ALIAS: upload
         run: |
-          mkdir out
-          cp app/android/app/build/outputs/apk/release/app-release.apk out/odies-world.apk
-          cp app/android/app/build/outputs/bundle/release/app-release.aab out/odies-world.aab
+          echo "$UPLOAD_KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/upload.jks"
+          RELEASE_KEYSTORE="$RUNNER_TEMP/upload.jks" ./gradlew bundleRelease -PversionCode=$((GITHUB_RUN_NUMBER + 1)) --no-daemon
+          cp app/build/outputs/bundle/release/app-release.aab ../../out/odies-world-google-play.aab
+          rm -f "$RUNNER_TEMP/upload.jks"
       - uses: actions/upload-artifact@v4
         with:
           name: odies-world-app
@@ -50,7 +61,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh release delete app --yes --cleanup-tag || true
-          gh release create app out/odies-world.apk \
+          gh release create app out/* \
             --title "Odie's World app (build $((GITHUB_RUN_NUMBER + 1)))" \
             --notes "Download odies-world.apk on the tablet and open it to install or update. Game changes also arrive inside the app automatically when it's online." \
             --target "$GITHUB_SHA" --latest

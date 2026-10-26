@@ -20,5 +20,6 @@ ${src}
 `;
 fs.mkdirSync(out, { recursive: true });
 fs.writeFileSync(`${out}/index.html`, page);
+fs.copyFileSync(new URL('../game/privacy.html', import.meta.url), `${out}/privacy.html`);
 fs.writeFileSync(`${out}/version.json`, JSON.stringify({ version }) + '\n');
 console.log(`built ${out}/index.html version ${version}`);

@@ -1,0 +1,47 @@
+ODIE'S WORLD: GOOGLE PLAY LISTING TEXT
+
+App name (30 characters max):
+Odie's World
+
+Short description (80 characters max):
+Hammer, dig, fish and play! A calm sensory playground for little hands.
+
+Full description (4000 characters max):
+Odie's World is a sensory play game made by a dad for his 6-year-old son. Every corner is full of things to tap, drag, build and discover, with satisfying sounds and gentle vibrations. There's no score, no timer, and no way to lose. Just play.
+
+WORKSHOP
+Swing a hammer, cut wood with a saw, drill holes, weld shiny beads, paint, heat metal in a forge, throw sparks with an angle grinder, and run a giant power hammer.
+
+POND
+Open the tackle boxes and toss over 150 colorful lures into the water, watch the fish chase them, listen to the frogs croak, and guide a hungry rubber worm that grows longer with every bug it eats.
+
+YARD
+Catch glowing lightning bugs at night, collect eggs from the chickens, pan for rocks, blow leaves into a crackling campfire, mow the lawn, and dig tunnels underground with worms and colorful moles hunting for buried treasure.
+
+SCIENCE
+Crank a generator to light a bulb, and spray a water wheel to power a whole city.
+
+MADE FOR KIDS
+- No ads
+- No in-app purchases
+- No accounts or sign-in
+- Collects no data at all
+- Works offline
+
+New things are added often, and they show up in the app automatically.
+
+Privacy policy URL:
+https://daniels84-prog.github.io/odies-world/privacy.html
+
+Category: Games > Educational (or Casual)
+Tags to consider: Kids, Sensory, Relaxing, Offline
+Target age groups: Ages 5 and under, Ages 6-8
+Contains ads: No
+In-app purchases: No
+Data safety: No data collected, no data shared
+
+GRAPHICS (in this folder)
+- app-icon-512.png: app icon (512 x 512)
+- feature-graphic.png: feature graphic (1024 x 500)
+- phone-1 to phone-6: phone screenshots (1080 x 1920)
+- tab-1 to tab-6: tablet screenshots (1920 x 1200), use for both 7-inch and 10-inch tablets
