@@ -1,4 +1,4 @@
-# Publishes the game to https://daniels84-prog.github.io/odies-world/ whenever it changes.
+# Publishes the game to https://daniels84-prog.github.io/odies-world/ whenever the game changes.
 # The app checks this site for newer versions of the game.
 name: Website
 on:
